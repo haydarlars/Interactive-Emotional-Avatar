@@ -1,5 +1,9 @@
+// Remarks: find & replace geminiService, lmStudioService, openAIService
+
 import React, { useState, useRef, useEffect } from 'react';
-import { geminiService } from '../services/GeminiService';
+// import { geminiService } from '../services/GeminiService';
+import { lmStudioService } from '../services/LMStudioService';
+// import { openAIService } from '../services/OpenAIService';
 
 const SmartSpeechHandler = ({ currentEmotion, onGeminiResponse, onEmotionChange, onAnimationChange, onEmotionReset, autoRecordingEnabled, isSpeaking }) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -102,7 +106,8 @@ const SmartSpeechHandler = ({ currentEmotion, onGeminiResponse, onEmotionChange,
     
     try {
         console.log('Current emotion sent to Gemini:', currentEmotion);
-      const response = await geminiService.respondAsFriend(text, currentEmotion);
+      // rename / replace geminiService | lmStudioService | openAIService  
+      const response = await lmStudioService.respondAsFriend(text, currentEmotion);
       
       // Handle structured response
       const responseData = {

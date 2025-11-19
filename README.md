@@ -6,9 +6,9 @@ An interactive 3D AI avatar that responds to your emotions and speech with reali
 
 - 🎭 **Real-time Emotion Detection** - Uses face-api.js to detect and track facial emotions
 - 🎤 **Voice Interaction** - Speech-to-text recognition for natural conversations
-- 🤖 **AI Responses** - Powered by Google Gemini API for intelligent, context-aware responses
+- 🤖 **AI Responses** - Powered by LM Studio, OpenAI & Gemini API for intelligent, context-aware responses
 - 🎨 **3D Avatar** - Animated 3D character with facial expressions and realistic mouth movements
-- 🗣️ **Text-to-Speech** - AI responses are spoken aloud with emotion-based voice modulation
+- 🗣️ **Text-to-Speech** - AI Elevenlabs responses are spoken aloud with emotion-based voice modulation
 - ⚡ **Real-time Rendering** - Built with React Three Fiber for smooth 3D performance
 
 ## Setup & Installation
@@ -18,7 +18,7 @@ An interactive 3D AI avatar that responds to your emotions and speech with reali
 - Node.js (version 16 or higher)
 - A modern web browser with WebGL support
 - Webcam and microphone access
-- Google AI API key
+- Gemini | LM Studio | OpenAI | Elevenlabs API key
 
 ### Installation Steps
 
@@ -37,12 +37,21 @@ An interactive 3D AI avatar that responds to your emotions and speech with reali
    
    Create a `.env` file in the root directory:
    ```env
-   VITE_GEMINI_API_KEY=your_google_ai_api_key_here
+   VITE_GEMINI_API_KEY=
+   VITE_GEMINI_MODEL=gemini-2.5-flash
+   VITE_LM_STUDIO_API_KEY=
+   VITE_LM_STUDIO_URL=http://127.0.0.1:1234/v1/chat/completions
+   VITE_LM_STUDIO_MODEL=openai/gpt-oss-20b
+   VITE_OPENAI_API_KEY=
+   VITE_OPENAI_URL=https://api.openai.com/v1/chat/completions
+   VITE_OPENAI_MODEL=gpt-4o-mini
+   VITE_ELEVENLABS_API_KEY= 
+   VITE_ELEVENLABS_VOICE_ID=
    ```
    
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://aistudio.google.com/)
-   - Sign in with your Google account
+   To get a Gemini | LM Studio | OpenAI | Elevenlabs API key:
+   - Visit provider site
+   - Sign in with your account
    - Generate a new API key
    - Copy the key to your `.env` file
 
@@ -75,9 +84,9 @@ The app requires the following browser permissions:
 - **3D Graphics**: Three.js + React Three Fiber
 - **3D Controls**: @react-three/drei
 - **Face Detection**: face-api.js
-- **AI Integration**: Google Gemini API
+- **AI Integration**: Gemini | LM Studio | OpenAI
 - **Speech Recognition**: Web Speech API
-- **Text-to-Speech**: Speech Synthesis API
+- **Text-to-Speech**: Elevenlabs - Speech Synthesis API
 
 ## Project Structure
 
@@ -91,6 +100,8 @@ src/
 │   └── Background.jsx         # 3D environment
 ├── services/
 │   └── GeminiService.js       # AI API integration
+│   └── LMStudioService.js     # AI API integration
+│   └── OpenAIService.js       # AI API integration
 ├── App.jsx                    # Main application
 └── main.jsx                   # React entry point
 
@@ -135,7 +146,7 @@ The built files will be in the `dist/` directory, ready for deployment to any st
 - Try refreshing the page and re-granting permissions
 
 **API errors:**
-- Verify your Gemini API key is correct in `.env`
+- Verify your Gemini | LM Studio | OpenAI | Elevenlabs API key is correct in `.env`
 - Check if you have API quota remaining
 - Ensure your API key has the necessary permissions
 
