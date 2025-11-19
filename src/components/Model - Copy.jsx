@@ -5,18 +5,6 @@ import { useRef, useEffect, useState } from 'react'
 export function Model({ emotion = 'neutral', currentAnimation = 'Idle.fbx', isSpeaking = false }) {
   const { nodes, materials } = useGLTF('/model/model(3).glb')
 
-  // DEBUG: Print all meshes + morph targets
-useEffect(() => {
-  console.log("=== SCANNING MODEL FOR BLENDSHAPES ===");
-  Object.entries(nodes).forEach(([name, node]) => {
-    if (node.morphTargetDictionary) {
-      console.log("Mesh:", name);
-      console.log("Morph Targets:", node.morphTargetDictionary);
-    }
-  });
-}, []);
-
-
   const group = useRef()
   const [previousAnimation, setPreviousAnimation] = useState('Idle')
 
@@ -126,45 +114,36 @@ useEffect(() => {
 
     // Speaking / lipsync
     if (isSpeaking) {
-  const t = state.clock.elapsedTime
+      const t = state.clock.elapsedTime
+      const base = (Math.sin(t * 8) + Math.abs(Math.sin(t * 3.2))) * 0.35 + 0.2
+      const rand = (Math.sin(t * 13) + Math.cos(t * 7.3)) * 0.1
 
-  // MUCH SMALLER base amplitude
-  const base = (Math.sin(t * 8) * 0.06) + 0.08   // 0.02 → 0.14 range
-  const rand = Math.sin(t * 12) * 0.03           // subtle variation
+      morphMeshes.forEach(mesh => {
+        const dict = mesh.morphTargetDictionary
+        const infl = mesh.morphTargetInfluences
+        if (!dict || !infl) return
 
-  morphMeshes.forEach(mesh => {
-    const dict = mesh.morphTargetDictionary
-    const infl = mesh.morphTargetInfluences
-    if (!dict || !infl) return
+        let visemeFound = false
+        visemeList.forEach((vname, idxV) => {
+          const idx = getMorphIndex(dict, vname)
+          if (idx !== undefined) {
+            visemeFound = true
+            const phase = Math.sin(t * (6 + idxV)) * 0.5 + 0.5
+            infl[idx] = Math.max(infl[idx], Math.max(0, Math.min(1, base * phase + rand)))
+          }
+        })
 
-    let visemeFound = false
+          if (!visemeFound) {
+  const jawOpen = getMorphIndex(dict, 'jawOpen')
+  const mouthFunnel = getMorphIndex(dict, 'mouthFunnel')
+  const mouthPucker = getMorphIndex(dict, 'mouthPucker')
 
-    visemeList.forEach((vname, idxV) => {
-      const idx = getMorphIndex(dict, vname)
-      if (idx !== undefined) {
-        visemeFound = true
-
-        // individual viseme amplitude (tiny)
-        const phase = Math.sin(t * (6 + idxV)) * 0.5 + 0.5
-        const value = (base * phase) + rand
-
-        infl[idx] = Math.min(0.15, Math.max(0, value))   // HARD LIMIT
-      }
-    })
-
-    // fallback if no visemes exist
-    if (!visemeFound) {
-      const jawOpen = getMorphIndex(dict, 'jawOpen')
-      const funnel = getMorphIndex(dict, 'mouthFunnel')
-      const pucker = getMorphIndex(dict, 'mouthPucker')
-
-      if (jawOpen !== undefined) infl[jawOpen] = Math.min(0.15, base + rand)
-      if (funnel !== undefined) infl[funnel] = Math.min(0.12, Math.sin(t * 6) * 0.06 + 0.06)
-      if (pucker !== undefined) infl[pucker] = Math.min(0.12, Math.cos(t * 5) * 0.06 + 0.06)
-    }
-  })
+  if (jawOpen !== undefined) infl[jawOpen] = Math.max(infl[jawOpen], Math.min(0.3, base * 0.25))
+  if (mouthFunnel !== undefined) infl[mouthFunnel] = Math.max(infl[mouthFunnel], Math.min(0.2, Math.sin(t * 6) * 0.15 + 0.1))
+  if (mouthPucker !== undefined) infl[mouthPucker] = Math.max(infl[mouthPucker], Math.min(0.2, Math.cos(t * 5) * 0.15 + 0.1))
 }
-
+      })
+    }
   })
 
   return (

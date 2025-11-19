@@ -5,18 +5,6 @@ import { useRef, useEffect, useState } from 'react'
 export function Model({ emotion = 'neutral', currentAnimation = 'Idle.fbx', isSpeaking = false }) {
   const { nodes, materials } = useGLTF('/model/model(3).glb')
 
-  // DEBUG: Print all meshes + morph targets
-useEffect(() => {
-  console.log("=== SCANNING MODEL FOR BLENDSHAPES ===");
-  Object.entries(nodes).forEach(([name, node]) => {
-    if (node.morphTargetDictionary) {
-      console.log("Mesh:", name);
-      console.log("Morph Targets:", node.morphTargetDictionary);
-    }
-  });
-}, []);
-
-
   const group = useRef()
   const [previousAnimation, setPreviousAnimation] = useState('Idle')
 
