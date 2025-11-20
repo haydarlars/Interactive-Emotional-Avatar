@@ -38,16 +38,7 @@ An interactive 3D AI avatar that responds to your emotions and speech with reali
    Create a `.env` file in the root directory:
    ```env
    VITE_GEMINI_API_KEY=
-   VITE_GEMINI_MODEL=gemini-2.5-flash
-   VITE_LM_STUDIO_API_KEY=
-   VITE_LM_STUDIO_URL=http://127.0.0.1:1234/v1/chat/completions
-   VITE_LM_STUDIO_MODEL=openai/gpt-oss-20b
-   VITE_OPENAI_API_KEY=
-   VITE_OPENAI_URL=https://api.openai.com/v1/chat/completions
-   VITE_OPENAI_MODEL=gpt-4o-mini
-   VITE_ELEVENLABS_API_KEY= 
-   VITE_ELEVENLABS_VOICE_ID=
-   ```
+ 
    
    To get a Gemini | LM Studio | OpenAI | Elevenlabs API key:
    - Visit provider site
